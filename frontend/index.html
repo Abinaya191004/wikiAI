@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WikiAI - AI-Powered Knowledge Base</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">🧠 WikiAI</h1>
+            <p class="tagline">Discover Knowledge with AI-Powered Intelligence</p>
+        </header>
+
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search for any topic..." id="searchInput">
+                <button class="search-btn" onclick="searchTopic()">🔍</button>
+            </div>
+
+            <div class="ai-features">
+                <div class="feature-card" onclick="searchTopic('Science')">
+                    <div class="feature-icon">🔬</div>
+                    <h3>Science</h3>
+                    <p>Explore scientific discoveries and theories</p>
+                </div>
+                <div class="feature-card" onclick="searchTopic('History')">
+                    <div class="feature-icon">📜</div>
+                    <h3>History</h3>
+                    <p>Journey through historical events and figures</p>
+                </div>
+                <div class="feature-card" onclick="searchTopic('Technology')">
+                    <div class="feature-icon">💻</div>
+                    <h3>Technology</h3>
+                    <p>Discover latest tech innovations</p>
+                </div>
+                <div class="feature-card" onclick="searchTopic('Geography')">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Geography</h3>
+                    <p>Explore countries, cities, and landmarks</p>
+                </div>
+            </div>
+
+            <div class="trending-topics">
+                <h3 class="trending-title">Trending Topics</h3>
+                <div class="topic-tags">
+                    <span class="topic-tag" onclick="searchTopic('Computer')">Computer</span>
+                    <span class="topic-tag" onclick="searchTopic('Artificial Intelligence')">Artificial Intelligence</span>
+                    <span class="topic-tag" onclick="searchTopic('Climate Change')">Climate Change</span>
+                    <span class="topic-tag" onclick="searchTopic('Space Exploration')">Space Exploration</span>
+                    <span class="topic-tag" onclick="searchTopic('India')">India</span>
+                    <span class="topic-tag" onclick="searchTopic('Physics')">Physics</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>AI is fetching comprehensive information...</p>
+        </div>
+
+        <div class="content-area" id="contentArea">
+            <!-- Dynamic content will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive Wikipedia-style data
+        const encyclopediaData = {
+            'Computer': {
+                title: 'Computer',
+                image: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="400" height="300" fill="%23667eea"/><rect x="50" y="50" width="300" height="180" fill="white" rx="10"/><rect x="60" y="60" width="280" height="140" fill="%23f0f0f0"/><rect x="70" y="210" width="260" height="15" fill="%23333" rx="7"/><circle cx="200" cy="240" r="8" fill="%23333"/><text x="200" y="280" text-anchor="middle" fill="white" font-size="18" font-family="Arial">Computer</text></svg>',
+                summary: 'A computer is a programmable device for processing, storing, and displaying information, consisting of hardware and software components working together to execute instructions.',
+                infobox: {
+                    'Type': 'Electronic computing device',
+                    'First developed': '1940s (electronic)',
+                    'Key components': 'CPU, Memory, Storage, I/O devices',
+                    'Primary function': 'Data processing and storage',
+                    'Classification': 'Digital electronic machine'
+                },
+                content: `A computer is a programmable device for processing, storing, and displaying information. A general-purpose computer has four main components: the arithmetic logic unit (ALU), the control unit, the memory, and the input and output devices (collectively termed I/O).
+
+                <h2>Definition and Overview</h2>
+                <p>Modern computers are electronic devices that can automatically carry out sequences of arithmetic or logical operations. They process data according to a list of instructions called a program. Computers can range from tiny microcontrollers in household appliances to supercomputers used for complex scientific calculations.</p>
+
+                <h2>History</h2>
+                <p>The development of computing hardware has evolved significantly from mechanical devices to modern electronic systems. Early mechanical computing devices were used for gunnery calculations and other military applications. Charles Babbage's Analytical Engine, designed in the 1830s, possessed many properties of a modern electronic computer, including internal memory equivalent to RAM and programmable capabilities.</p>
+
+                <h3>Key Historical Milestones</h3>
+                <ul>
+                <li><strong>1800s:</strong> Mechanical calculating machines and Babbage's designs</li>
+                <li><strong>1940s:</strong> First electronic computers (ENIAC, EDVAC)</li>
+                <li><strong>1970s:</strong> Development of personal computers</li>
+                <li><strong>1980s-1990s:</strong> IBM PC and home computer revolution</li>
+                <li><strong>2000s-Present:</strong> Mobile computing, tablets, smartphones</li>
+                </ul>
+
+                <h2>Main Components</h2>
+                <h3>Central Processing Unit (CPU)</h3>
+                <p>The CPU contains the computer's arithmetic, logic, and control circuitry. It executes instructions from computer programs by performing basic arithmetic, logical, control, and input/output operations.</p>
+
+                <h3>Memory</h3>
+                <p>Computer memory stores data and program instructions. Primary memory (RAM) provides temporary storage for active programs and data, while secondary storage (hard drives, SSDs) provides permanent data storage.</p>
+
+                <h3>Input/Output Devices</h3>
+                <p>Input devices (keyboard, mouse, touchscreen) allow users to provide data and commands. Output devices (monitor, printer, speakers) present processed information to users.</p>
+
+                <h2>Types of Computers</h2>
+                <h3>Personal Computers</h3>
+                <p>A personal computer (PC) is a digital computer designed for use by only one person at a time. A typical personal computer assemblage consists of a central processing unit, computer memory, and various peripheral devices.</p>
+
+                <h3>Classification by Size and Power</h3>
+                <ul>
+                <li><strong>Microcomputers:</strong> Personal computers, laptops, tablets</li>
+                <li><strong>Minicomputers:</strong> Mid-range computers for small businesses</li>
+                <li><strong>Mainframe computers:</strong> Large systems for enterprise computing</li>
+                <li><strong>Supercomputers:</strong> Extremely powerful systems for scientific computing</li>
+                <li><strong>Embedded systems:</strong> Specialized computers in devices and appliances</li>
+                </ul>
+
+                <h2>Modern Applications</h2>
+                <p>Computers have become integral to virtually every aspect of modern life:</p>
+                <ul>
+                <li><strong>Business and Commerce:</strong> Data processing, accounting, e-commerce</li>
+                <li><strong>Education:</strong> Online learning, research, digital libraries</li>
+                <li><strong>Entertainment:</strong> Gaming, streaming, digital media</li>
+                <li><strong>Communication:</strong> Internet, email, social networks</li>
+                <li><strong>Science and Research:</strong> Modeling, simulation, data analysis</li>
+                <li><strong>Healthcare:</strong> Medical imaging, patient records, diagnostics</li>
+                </ul>
+
+                <h2>Current Trends</h2>
+                <p>Modern computing trends include cloud computing, mobile devices, artificial intelligence integration, quantum computing research, and Internet of Things (IoT) applications. Computers continue to become more powerful while decreasing in size and cost.</p>`,
+                references: [
+                    'Computer - Wikipedia',
+                    'Britannica Encyclopedia - Computer Definition and History',
+                    'Computer History Museum - Timeline of Computer History',
+                    'Live Science - History of Computers: A Brief Timeline'
+                ]
+            },
+            'Artificial Intelligence': {
+                title: 'Artificial Intelligence',
+                image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop',
+                summary: 'Artificial Intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think and learn like humans.',
+                infobox: {
+                    'Field': 'Computer Science',
+                    'Founded': '1956',
+                    'Key figures': 'Alan Turing, John McCarthy',
+                    'Applications': 'Machine Learning, Robotics, NLP'
+                },
+                content: `<p>Artificial Intelligence represents one of the most transformative technologies of the 21st century. It encompasses various subfields including machine learning, deep learning, natural language processing, and computer vision.</p>
+
+                <h2>History</h2>
+                <p>The field of AI was formally established in 1956 at the Dartmouth Conference, where John McCarthy coined the term "artificial intelligence." Early pioneers like Alan Turing laid the theoretical foundations with concepts like the Turing Test.</p>
+
+                <h2>Types of AI</h2>
+                <h3>Narrow AI</h3>
+                <p>Also known as weak AI, this type is designed to perform specific tasks, such as voice recognition or chess playing. Most current AI applications fall into this category.</p>
+
+                <h3>General AI</h3>
+                <p>Also called strong AI or AGI (Artificial General Intelligence), this would match or exceed human cognitive abilities across all domains. This remains a theoretical goal.</p>
+
+                <h3>Superintelligence</h3>
+                <p>A hypothetical form of AI that would surpass human intelligence in all aspects, including creativity, general wisdom, and social skills.</p>
+
+                <h2>Key Technologies</h2>
+                <ul>
+                <li><strong>Machine Learning:</strong> Algorithms that improve through experience</li>
+                <li><strong>Deep Learning:</strong> Neural networks with multiple layers</li>
+                <li><strong>Natural Language Processing:</strong> Understanding and generating human language</li>
+                <li><strong>Computer Vision:</strong> Interpreting and understanding visual information</li>
+                <li><strong>Robotics:</strong> Physical embodiment of AI systems</li>
+                </ul>
+
+                <h2>Applications</h2>
+                <p>Modern AI applications include virtual assistants (Siri, Alexa), recommendation systems (Netflix, Amazon), autonomous vehicles (Tesla, Waymo), and medical diagnosis systems that can detect diseases from imaging with specialist-level accuracy.</p>
+
+                <h2>Ethics and Challenges</h2>
+                <p>AI development raises important questions about job displacement, privacy, bias in algorithms, and the need for responsible AI governance to ensure beneficial outcomes for society.</p>`,
+                references: [
+                    'Russell, S., & Norvig, P. (2020). Artificial Intelligence: A Modern Approach',
+                    'Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep Learning',
+                    'MIT Technology Review - AI Research',
+                    'IEEE Transactions on Artificial Intelligence'
+                ]
+            },
+            'India': {
+                title: 'India',
+                image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=400&h=300&fit=crop',
+                summary: 'India, officially the Republic of India, is a country in South Asia. It is the seventh-largest country by area, the most populous country, and the most populous democracy in the world.',
+                infobox: {
+                    'Capital': 'New Delhi',
+                    'Largest city': 'Mumbai',
+                    'Official languages': 'Hindi, English',
+                    'Population': '1.4+ billion (2023)',
+                    'Area': '3.287 million km²',
+                    'Currency': 'Indian Rupee (₹)'
+                },
+                content: `<p>India is a federal union comprising 28 states and 8 union territories, with a rich cultural heritage spanning over 4,500 years. It is known for its diversity in languages, religions, and cultures.</p>
+
+                <h2>History</h2>
+                <p>India has one of the world's oldest civilizations, with the Indus Valley Civilization dating back to 3300 BCE. The country has been ruled by various empires including the Maurya, Gupta, Mughal, and British empires before gaining independence in 1947.</p>
+
+                <h2>Geography</h2>
+                <p>India is bounded by the Indian Ocean on the south, the Arabian Sea on the west, and the Bay of Bengal on the east. It shares land borders with Pakistan, China, Nepal, Bhutan, Bangladesh, and Myanmar.</p>
+
+                <h3>Major Regions</h3>
+                <ul>
+                <li><strong>Northern Plains:</strong> Fertile Gangetic plains</li>
+                <li><strong>Deccan Plateau:</strong> Southern peninsular region</li>
+                <li><strong>Himalayan Region:</strong> Northern mountain range</li>
+                <li><strong>Coastal Plains:</strong> Eastern and western coastal regions</li>
+                </ul>
+
+                <h2>Economy</h2>
+                <p>India is the world's fifth-largest economy by nominal GDP and third-largest by purchasing power parity. Key sectors include information technology, pharmaceuticals, agriculture, and manufacturing.</p>
+
+                <h2>Culture</h2>
+                <p>Indian culture is characterized by its diversity, with hundreds of languages spoken and multiple religions practiced. Major religions include Hinduism, Islam, Christianity, Sikhism, Buddhism, and Jainism.</p>
+
+                <h3>Languages</h3>
+                <p>India recognizes 22 official languages, with Hindi being the most widely spoken, followed by Bengali, Marathi, Telugu, Tamil, and others.</p>
+
+                <h2>Government</h2>
+                <p>India is a federal democratic republic with a parliamentary system of government. The President is the head of state, while the Prime Minister is the head of government.</p>`,
+                references: [
+                    'Government of India Official Portal',
+                    'CIA World Factbook - India',
+                    'Encyclopedia Britannica - India',
+                    'Ministry of External Affairs, India'
+                ]
+            },
+            'Physics': {
+                title: 'Physics',
+                image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop',
+                summary: 'Physics is the natural science that studies matter, its motion and behavior through space and time, and the related entities of energy and force.',
+                infobox: {
+                    'Type': 'Natural Science',
+                    'Key areas': 'Mechanics, Thermodynamics, Electromagnetism',
+                    'Notable physicists': 'Newton, Einstein, Hawking',
+                    'Applications': 'Technology, Engineering, Medicine'
+                },
+                content: `<p>Physics is one of the most fundamental scientific disciplines, seeking to understand how the universe behaves. It ranges from studying the smallest subatomic particles to the largest structures in the cosmos.</p>
+
+                <h2>Branches of Physics</h2>
+                <h3>Classical Mechanics</h3>
+                <p>Studies the motion of macroscopic objects, from projectiles to parts of machinery, and astronomical objects like spacecraft, planets, stars, and galaxies.</p>
+
+                <h3>Thermodynamics</h3>
+                <p>Deals with heat, work, and temperature, and their relation to energy, radiation, and physical properties of matter.</p>
+
+                <h3>Electromagnetism</h3>
+                <p>Studies electric and magnetic phenomena, including electricity, magnetism, and light as electromagnetic radiation.</p>
+
+                <h3>Quantum Mechanics</h3>
+                <p>Describes the behavior of matter and energy at the atomic and subatomic scale, where classical physics fails to provide accurate descriptions.</p>
+
+                <h3>Relativity</h3>
+                <p>Einstein's theories of special and general relativity describe the behavior of objects at high speeds and in strong gravitational fields.</p>
+
+                <h2>Modern Physics</h2>
+                <p>Modern physics encompasses developments from the early 20th century, including:</p>
+                <ul>
+                <li><strong>Particle Physics:</strong> Study of fundamental particles and forces</li>
+                <li><strong>Condensed Matter Physics:</strong> Properties of solid and liquid matter</li>
+                <li><strong>Astrophysics:</strong> Application of physics to astronomical objects</li>
+                <li><strong>Biophysics:</strong> Application of physics to biological systems</li>
+                </ul>
+
+                <h2>Applications</h2>
+                <p>Physics principles underlie most modern technologies, including computers, lasers, nuclear power, medical imaging devices, and telecommunications.</p>
+
+                <h2>Nobel Prize in Physics</h2>
+                <p>The Nobel Prize in Physics has been awarded annually since 1901 to recognize outstanding contributions to the field, honoring discoveries that have significantly advanced human understanding of the physical world.</p>`,
+                references: [
+                    'Halliday, D., Resnick, R., & Walker, J. Fundamentals of Physics',
+                    'Feynman, R. P. The Feynman Lectures on Physics',
+                    'American Physical Society',
+                    'Institute of Physics'
+                ]
+            }
+        };
+
+        
+        function getTopicImage(query) {
+            const svgImages = {
+                'computer': 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="400" height="300" fill="%23667eea"/><rect x="50" y="50" width="300" height="180" fill="white" rx="10"/><text x="200" y="280" text-anchor="middle" fill="white" font-size="18" font-family="Arial">Computer</text></svg>',
+                'default': 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="400" height="300" fill="%23667eea"/><circle cx="200" cy="150" r="50" fill="white"/><text x="200" y="160" text-anchor="middle" fill="%23667eea" font-size="24" font-family="Arial">📖</text><text x="200" y="280" text-anchor="middle" fill="white" font-size="16" font-family="Arial">Knowledge</text></svg>'
+            };
+
+            const lowerQuery = query.toLowerCase();
+            return svgImages[lowerQuery] || svgImages.default;
+        }
+
+
+
+        // Get image from Wikipedia API, fallback to getTopicImage()
+        async function getWikipediaImage(topic) {
+            try {
+                const res = await fetch(
+                    `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(topic)}&prop=pageimages&format=json&pithumbsize=500&origin=*`
+                );
+                const data = await res.json();
+                const pages = data.query.pages;
+                const page = Object.values(pages)[0];
+
+                if (page.thumbnail) {
+                    return page.thumbnail.source;
+                } else {
+                    return getTopicImage(topic); // Fallback to your SVG images
+                }
+            } catch {
+                return getTopicImage(topic); // Fallback on error
+            }
+        }
+
+        // Main AI + Wikipedia image generator
+        async function generateWikipediaContent(topic) {
+            try {
+                const response = await fetch("https://wikiai-4zmv.onrender.com/search", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ topic: topic })
+                });
+                const data = await response.json();
+
+                // Get Wikipedia or fallback SVG image
+                const imageUrl = await getWikipediaImage(topic);
+
+                return {
+                    title: topic.charAt(0).toUpperCase() + topic.slice(1),
+                    image: imageUrl,
+                    summary: data.content.split("\n")[0], // First paragraph
+                    infobox: {
+                        'Topic': topic.charAt(0).toUpperCase() + topic.slice(1),
+                        'Source': 'AI Generated',
+                        'Updated': new Date().toLocaleDateString()
+                    },
+                    content: `<p>${data.content.replace(/\n/g, "</p><p>")}</p>`,
+                    references: ["Generated by AI (OpenRouter API)"]
+                };
+            } catch (error) {
+                console.error("Error fetching AI content:", error);
+                return {
+                    title: topic.charAt(0).toUpperCase() + topic.slice(1),
+                    image: getTopicImage(topic), // Always fallback to SVG on error
+                    summary: "Error fetching AI content.",
+                    content: "<p>Please try again later.</p>",
+                    references: []
+                };
+            }
+        }
+
+
+        async function searchTopic(topic = null) {
+            const searchInput = document.getElementById('searchInput');
+            const query = topic || searchInput.value.trim();
+
+            if (!query) {
+                alert('Please enter a search term');
+                return;
+            }
+
+            const loading = document.getElementById('loading');
+            const contentArea = document.getElementById('contentArea');
+
+            // Show loading spinner
+            loading.classList.add('active');
+            contentArea.classList.remove('active');
+            loading.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            try {
+                // Fetch AI-generated Wikipedia-like content
+                const data = await generateWikipediaContent(query);
+
+                // Display it
+                displayContent(data);
+
+            } catch (error) {
+                console.error("Error searching topic:", error);
+                contentArea.innerHTML = `<p style="color:red;">⚠ Error loading topic. Please try again.</p>`;
+                contentArea.classList.add('active');
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+
+
+        function displayContent(data) {
+            const contentArea = document.getElementById('contentArea');
+
+            // Clear content
+            contentArea.innerHTML = '';
+
+            // Infobox HTML
+            let infoboxHTML = '';
+            if (data.infobox) {
+                infoboxHTML = `
+                    <div class="infobox">
+                        <div class="infobox-title">${data.title}</div>
+                        ${Object.entries(data.infobox).map(([key, value]) => `
+                            <div class="infobox-row">
+                                <div class="infobox-label">${key}:</div>
+                                <div class="infobox-value">${value}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Article header
+            const articleHeader = document.createElement('div');
+            articleHeader.className = 'article-header';
+            articleHeader.innerHTML = `
+                <h1 class="article-title">${data.title} <span class="ai-badge">🤖 AI-Powered</span></h1>
+                <div class="article-meta">
+                    <span class="meta-item">📅 Updated: ${new Date().toLocaleDateString()}</span>
+                    <span class="meta-item">🔍 AI-Verified</span>
+                    <span class="meta-item">📚 Encyclopedia Style</span>
+                    <span class="meta-item">🌐 Multi-Source</span>
+                </div>
+            `;
+
+            const articleContent = document.createElement('div');
+            articleContent.className = 'article-content';
+
+            // Add infobox
+            if (infoboxHTML) {
+                const infoboxDiv = document.createElement('div');
+                infoboxDiv.innerHTML = infoboxHTML;
+                articleContent.appendChild(infoboxDiv.firstElementChild);
+            }
+
+            // Add image
+            if (data.image) {
+                const img = document.createElement('img');
+                img.src = data.image;
+                img.alt = data.title;
+                img.className = 'article-image';
+                img.style.display = 'block';
+                articleContent.appendChild(img);
+            }
+
+            // Add summary
+            if (data.summary) {
+                const summaryP = document.createElement('p');
+                summaryP.innerHTML = `<strong>${data.summary}</strong>`;
+                articleContent.appendChild(summaryP);
+            }
+
+            // Add main content
+            if (data.content) {
+                articleContent.appendChild(document.createElement('br'));
+                const contentDiv = document.createElement('div');
+                contentDiv.innerHTML = data.content;
+                articleContent.appendChild(contentDiv);
+            }
+
+            // References
+            const referencesDiv = document.createElement('div');
+            referencesDiv.className = 'references';
+            referencesDiv.innerHTML = `
+                <h3 class="ref-title">References</h3>
+                <ul class="ref-list">
+                    ${(Array.isArray(data.references) ? data.references : []).map(ref => `<li class="ref-item">${ref}</li>`).join('')}
+                </ul>
+            `;
+
+            // Append to DOM
+            contentArea.appendChild(articleHeader);
+            contentArea.appendChild(articleContent);
+            contentArea.appendChild(referencesDiv);
+
+            // Show content
+            contentArea.classList.add('active');
+            setTimeout(() => {
+                contentArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+
+    </script>
+</body>
+</html>
