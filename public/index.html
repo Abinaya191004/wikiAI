@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WikiAI - AI-Powered Knowledge Base</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            GoogleAuthProvider,
+            signInWithPopup
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBUtqsBL4N35qE-52myzg7oSYYINn7VSIg",
+            authDomain: "wikiai-f51a1.firebaseapp.com",
+            projectId: "wikiai-f51a1",
+            storageBucket: "wikiai-f51a1.firebasestorage.app",
+            messagingSenderId: "998485212331",
+            appId: "1:998485212331:web:7748c2682f8d92dd4a4bee"
+        };
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Make auth available globally
+        window.firebaseAuth = auth;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.signOut = signOut;
+        window.onAuthStateChanged = onAuthStateChanged;
+        window.signInWithPopup = signInWithPopup;
+        window.googleProvider = googleProvider;
+    </script>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🧠</div>
+            <span>WikiAI</span>
+        </div>
+        <div class="auth-buttons" id="authButtons">
+            <button class="btn btn-secondary" onclick="openAuthModal('signin')">Sign In</button>
+            <button class="btn btn-primary" onclick="openAuthModal('signup')">Sign Up</button>
+        </div>
+        <div class="auth-buttons hidden" id="userButtons">
+            <span id="userEmail" style="color: white; margin-right: 1rem;"></span>
+            <button class="btn btn-secondary" onclick="signOutUser()">Sign Out</button>
+        </div>
+    </header>
+
+    <main class="main-content" id="mainContent">
+        <h1 class="hero-title">WikiAI</h1>
+        <p class="hero-subtitle">Discover Knowledge with AI-Powered Intelligence</p>
+        
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search for any topic..." id="searchInput">
+                <button class="search-btn" onclick="performSearch()">🔍</button>
+            </div>
+        </div>
+    </main>
+
+    <div class="dashboard" id="dashboard">
+        <div class="welcome-message" id="welcomeMessage"></div>
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search for any topic..." id="dashboardSearchInput">
+                <button class="search-btn" onclick="performSearch()">🔍</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeAuthModal()">
+        <div class="auth-modal" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeAuthModal()">&times;</button>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="signinTab" onclick="switchTab('signin')">Sign In</button>
+                <button class="auth-tab" id="signupTab" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+
+            <form class="auth-form active" id="signinForm">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="signinEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="signinPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+                
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                
+                <button type="button" class="google-btn" onclick="signInWithGoogle()">
+                    Continue with Google
+                </button>
+            </form>
+
+            <form class="auth-form" id="signupForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password (min 6 characters)</label>
+                    <input type="password" class="form-input" id="signupPassword" required minlength="6">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+                
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                
+                <button type="button" class="google-btn" onclick="signInWithGoogle()">
+                    Continue with Google
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="ai-features-container">
+        <div class="ai-features">
+            <div class="feature-card" onclick="searchTopic('Science')">
+                <div class="feature-icon">🔬</div>
+                <h3>Science</h3>
+                <p>Explore scientific discoveries and theories</p>
+            </div>
+            <div class="feature-card" onclick="searchTopic('History')">
+                <div class="feature-icon">📜</div>
+                <h3>History</h3>
+                <p>Journey through historical events and figures</p>
+            </div>
+            <div class="feature-card" onclick="searchTopic('Technology')">
+                <div class="feature-icon">💻</div>
+                <h3>Technology</h3>
+                <p>Discover latest tech innovations</p>
+            </div>
+            <div class="feature-card" onclick="searchTopic('Geography')">
+                <div class="feature-icon">🌍</div>
+                <h3>Geography</h3>
+                <p>Explore countries, cities, and landmarks</p>
+            </div>
+        </div>
+
+        <div class="trending-topics">
+            <h3 class="trending-title">Trending Topics</h3>
+            <div class="topic-tags">
+                <span class="topic-tag" onclick="searchTopic('Computer')">Computer</span>
+                <span class="topic-tag" onclick="searchTopic('Artificial Intelligence')">Artificial Intelligence</span>
+                <span class="topic-tag" onclick="searchTopic('Climate Change')">Climate Change</span>
+                <span class="topic-tag" onclick="searchTopic('Space Exploration')">Space Exploration</span>
+                <span class="topic-tag" onclick="searchTopic('India')">India</span>
+                <span class="topic-tag" onclick="searchTopic('Physics')">Physics</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>AI is fetching comprehensive information...</p>
+    </div>
+
+    <div class="content-area" id="contentArea">
+        </div>
+    
+
+    <script>
+        let currentUser = null;
+
+        // --- Core UI/Modal Functions ---
+
+        function openAuthModal(type) {
+            document.getElementById('modalOverlay').classList.add('active');
+            switchTab(type);
+        }
+
+        function closeAuthModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function switchTab(type) {
+            // Remove active classes
+            document.querySelectorAll('.auth-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            
+            // Add active classes
+            document.getElementById(type + 'Tab').classList.add('active');
+            document.getElementById(type + 'Form').classList.add('active');
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        function updateUIForAuthState(user) {
+            const authButtons = document.getElementById('authButtons');
+            const userButtons = document.getElementById('userButtons');
+            const userEmail = document.getElementById('userEmail');
+            
+            // This is a new part of the UI update function.
+            // It's a good practice to update all UI elements that depend on auth state here.
+            const searchInput = document.getElementById('searchInput');
+            const dashboardSearchInput = document.getElementById('dashboardSearchInput');
+            const searchButton = document.querySelector('.search-btn');
+
+            if (user) {
+                currentUser = user; // Update the global currentUser variable
+                authButtons.classList.add('hidden');
+                userButtons.classList.remove('hidden');
+                userEmail.textContent = user.email;
+
+                // Enable search for logged-in users
+                if (searchInput) searchInput.disabled = false;
+                if (dashboardSearchInput) dashboardSearchInput.disabled = false;
+                if (searchButton) searchButton.disabled = false;
+
+            } else {
+                currentUser = null; // Update the global currentUser variable
+                authButtons.classList.remove('hidden');
+                userButtons.classList.add('hidden');
+
+                // Disable search for guests
+                if (searchInput) {
+                    searchInput.value = '';
+                    searchInput.disabled = true;
+                    searchInput.placeholder = 'Please sign in to search...';
+                }
+                if (dashboardSearchInput) {
+                    dashboardSearchInput.value = '';
+                    dashboardSearchInput.disabled = true;
+                }
+                if (searchButton) {
+                    searchButton.disabled = true;
+                }
+            }
+        }
+
+        function performSearch() {
+            // New logic: if user is not logged in, open the modal
+            if (!currentUser) {
+                openAuthModal('signin');
+                return;
+            }
+
+            const searchInput = document.getElementById('searchInput').value || document.getElementById('dashboardSearchInput').value;
+            if (searchInput.trim()) {
+                searchTopic(searchInput);
+            } else {
+                showNotification('Please enter a search term', 'error');
+            }
+        }
+        
+        // And make sure you have this listener to keep track of the user's login state
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.onAuthStateChanged) {
+                window.onAuthStateChanged(window.firebaseAuth, (user) => {
+                    updateUIForAuthState(user);
+                });
+            }
+        });
+
+        // --- Authentication Functions ---
+
+        async function signInUser(event) {
+            event.preventDefault();
+            const email = document.getElementById('signinEmail').value;
+            const password = document.getElementById('signinPassword').value;
+
+            try {
+                await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
+                closeAuthModal();
+                showNotification('Successfully signed in!', 'success');
+            } catch (error) {
+                // Log the specific Firebase error code and message
+                console.error("Firebase Sign-In Error:", error.code, error.message);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        async function signUpUser(event) {
+            event.preventDefault();
+            const name = document.getElementById('signupName').value; // 'name' is unused in Firebase's default sign-up
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            try {
+                await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+                closeAuthModal();
+                showNotification('Account created successfully!', 'success');
+            } catch (error) {
+                // Log the specific Firebase error code and message
+                console.error("Firebase Sign-Up Error:", error.code, error.message);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        async function signInWithGoogle() {
+            try {
+                await window.signInWithPopup(window.firebaseAuth, window.googleProvider);
+                closeAuthModal();
+                showNotification('Successfully signed in with Google!', 'success');
+            } catch (error) {
+                showNotification(error.message, 'error');
+            }
+        }
+
+        async function signOutUser() {
+            try {
+                await window.signOut(window.firebaseAuth);
+                showNotification('Successfully signed out!', 'success');
+            } catch (error) {
+                showNotification(error.message, 'error');
+            }
+        }
+        
+        // --- Search and Content Functions ---
+
+        // Search functionality
+        function performSearch() {
+            const searchInput = document.getElementById('searchInput').value || document.getElementById('dashboardSearchInput').value;
+            if (searchInput.trim()) {
+                // Remove alert
+                searchTopic(searchInput);
+            }
+        }
+
+        // Enter key support for search
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && (e.target.id === 'searchInput' || e.target.id === 'dashboardSearchInput')) {
+                performSearch();
+            }
+        });
+
+        // Placeholder authentication functions
+        function signInWithGooglePlaceholder() {
+            alert('Google Sign-In clicked - connect to Firebase Auth');
+            // Add your Firebase Google Auth here
+        }
+
+        function signOutPlaceholder() {
+            // Add your Firebase sign out logic here
+            showMainContent();
+        }
+
+        function showDashboard(user) {
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+            document.getElementById('authButtons').classList.add('hidden');
+            document.getElementById('userButtons').classList.remove('hidden');
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.displayName || user.email}!`;
+        }
+
+        function showMainContent() {
+            document.getElementById('mainContent').style.display = 'flex';
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('authButtons').classList.remove('hidden');
+            document.getElementById('userButtons').classList.add('hidden');
+        }
+
+        // Form submissions
+        document.getElementById('signinForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            signInUser(e);
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            signUpUser(e);
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAuthModal();
+            }
+        });
+        
+        // Enhanced content formatting function
+        function formatAIContent(content) {
+            let formattedContent = content
+                .replace(/^\*{1,2}([^*]+)\*{1,2}$/gm, '<h2 class="content-heading">$1</h2>')
+                .replace(/\*\*([^*]+)\*\*/g, '<h3 class="content-subheading">$1</h3>')
+                .replace(/\*([^*]+)\*/g, '<strong>$1</strong>')
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/^[-•]\s+(.+)$/gm, '<li>$1</li>')
+                .replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
+
+            if (!formattedContent.includes('<p>')) {
+                formattedContent = '<p>' + formattedContent + '</p>';
+            }
+
+            formattedContent = formattedContent.replace(/(<li>.*<\/li>)/gs, function(match) {
+                return '<ul>' + match + '</ul>';
+            });
+
+            return formattedContent;
+        }
+
+        // Get topic image from Wikipedia API, fallback to SVG
+        async function getWikipediaImage(topic) {
+            try {
+                const res = await fetch(
+                    `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(topic)}&prop=pageimages&format=json&pithumbsize=500&origin=*`
+                );
+                const data = await res.json();
+                const pages = data.query.pages;
+                const page = Object.values(pages)[0];
+
+                if (page.thumbnail) {
+                    return page.thumbnail.source;
+                } else {
+                    return getTopicImage(topic);
+                }
+            } catch {
+                return getTopicImage(topic);
+            }
+        }
+
+        function getTopicImage(query) {
+            const svgImages = {
+                'computer': 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="400" height="300" fill="%23667eea"/><rect x="50" y="50" width="300" height="180" fill="white" rx="10"/><text x="200" y="280" text-anchor="middle" fill="white" font-size="18" font-family="Arial">Computer</text></svg>',
+                'default': 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="400" height="300" fill="%23667eea"/><circle cx="200" cy="150" r="50" fill="white"/><text x="200" y="160" text-anchor="middle" fill="%23667eea" font-size="24" font-family="Arial">📖</text><text x="200" y="280" text-anchor="middle" fill="white" font-size="16" font-family="Arial">Knowledge</text></svg>'
+            };
+
+            const lowerQuery = query.toLowerCase();
+            return svgImages[lowerQuery] || svgImages.default;
+        }
+
+        // Enhanced AI content generation
+        async function generateWikipediaContent(topic) {
+            try {
+                const response = await fetch("https://wikiai-1.onrender.com", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ topic: topic })
+                });
+                const data = await response.json();
+                
+                const imageUrl = await getWikipediaImage(topic);
+                
+                const formattedContent = formatAIContent(data.content);
+
+                return {
+                    title: topic.charAt(0).toUpperCase() + topic.slice(1),
+                    image: imageUrl,
+                    summary: data.content.split("\n")[0].replace(/\*+/g, ''),
+                    infobox: {
+                        'Topic': topic.charAt(0).toUpperCase() + topic.slice(1),
+                        'Source': 'AI Generated',
+                        'Updated': new Date().toLocaleDateString(),
+                        'User': currentUser ? currentUser.email.split('@')[0] : 'Guest'
+                    },
+                    content: formattedContent,
+                    references: ["Generated by AI (OpenRouter API)", "Enhanced with WikiAI formatting"]
+                };
+            } catch (error) {
+                console.error("Error fetching AI content:", error);
+                return {
+                    title: topic.charAt(0).toUpperCase() + topic.slice(1),
+                    image: getTopicImage(topic),
+                    summary: "Error fetching AI content.",
+                    content: "<p>Please try again later.</p>",
+                    references: []
+                };
+            }
+        }
+
+        async function searchTopic(topic = null) {
+            const searchInput = document.getElementById('searchInput');
+            const query = topic || searchInput.value.trim();
+
+            if (!query) {
+                showNotification('Please enter a search term', 'error');
+                return;
+            }
+
+            if (!currentUser) {
+                showNotification('Sign in for enhanced AI features!', 'info');
+            }
+
+            const loading = document.getElementById('loading');
+            const contentArea = document.getElementById('contentArea');
+
+            loading.classList.add('active');
+            contentArea.classList.remove('active');
+            loading.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            try {
+                const data = await generateWikipediaContent(query);
+                displayContent(data);
+            } catch (error) {
+                console.error("Error searching topic:", error);
+                contentArea.innerHTML = `<p style="color:red;">⚠ Error loading topic. Please try again.</p>`;
+                contentArea.classList.add('active');
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        function displayContent(data) {
+            const contentArea = document.getElementById('contentArea');
+            contentArea.innerHTML = '';
+
+            const articleHeader = document.createElement('div');
+            articleHeader.className = 'article-header';
+            articleHeader.innerHTML = `
+                <h1 class="article-title">${data.title} <span class="ai-badge">🤖 AI-Enhanced</span></h1>
+                <div class="article-meta">
+                    <span class="meta-item">📅 ${new Date().toLocaleDateString()}</span>
+                    <span class="meta-item">🔍 AI-Generated</span>
+                    <span class="meta-item">📚 Wikipedia-Style</span>
+                    <span class="meta-item">👤 ${currentUser ? 'Authenticated User' : 'Guest'}</span>
+                </div>
+            `;
+            
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = 'content-wrapper';
+
+            let infoboxHTML = '';
+            if (data.infobox) {
+                infoboxHTML = `
+                    <div class="infobox">
+                        <div class="infobox-title">${data.title}</div>
+                        ${Object.entries(data.infobox).map(([key, value]) => `
+                            <div class="infobox-row">
+                                <div class="infobox-label">${key}:</div>
+                                <div class="infobox-value">${value}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                contentWrapper.innerHTML += infoboxHTML;
+            }
+
+            const articleBody = document.createElement('div');
+            articleBody.className = 'article-body';
+
+            if (data.image) {
+                const img = document.createElement('img');
+                img.src = data.image;
+                img.alt = data.title;
+                img.className = 'article-image';
+                articleBody.appendChild(img);
+            }
+
+            if (data.summary) {
+                const summaryP = document.createElement('p');
+                summaryP.innerHTML = `<strong class="article-summary">${data.summary}</strong>`;
+                articleBody.appendChild(summaryP);
+            }
+
+            if (data.content) {
+                const contentDiv = document.createElement('div');
+                contentDiv.innerHTML = data.content;
+                articleBody.appendChild(contentDiv);
+            }
+
+            const referencesDiv = document.createElement('div');
+            referencesDiv.className = 'references';
+            referencesDiv.innerHTML = `
+                <h3 class="ref-title">References</h3>
+                <ul class="ref-list">
+                    ${(Array.isArray(data.references) ? data.references : []).map(ref => `<li class="ref-item">${ref}</li>`).join('')}
+                </ul>
+            `;
+            articleBody.appendChild(referencesDiv);
+            
+            contentWrapper.appendChild(articleBody);
+            
+            contentArea.appendChild(articleHeader);
+            contentArea.appendChild(contentWrapper);
+
+            contentArea.classList.add('active');
+            setTimeout(() => {
+                contentArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Initialize auth state listener
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.onAuthStateChanged) {
+                window.onAuthStateChanged(window.firebaseAuth, (user) => {
+                    currentUser = user;
+                    updateUIForAuthState(user);
+                });
+            }
+        });
+        
+        // Enter key search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchTopic();
+                    }
+                });
+            }
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('authModal');
+            if (event.target === modal) {
+                closeAuthModal();
+            }
+        });
+    </script>
+</body>
+</html>
