@@ -37,6 +37,12 @@ app.post("/search", async (req, res) => {
         if (!topic) {
             return res.status(400).json({ error: "Topic is required" });
         }
+        
+        // Add a check to ensure the API key is set
+        if (!process.env.OPENROUTER_API_KEY) {
+            console.error("OpenRouter API Error: API key is not configured.");
+            return res.status(500).json({ error: "Backend configuration error: API key missing." });
+        }
 
         // Enhanced Wikipedia-style prompt for better formatting
         const prompt = `Write a comprehensive, well-structured Wikipedia-style article about "${topic}". 
@@ -54,7 +60,7 @@ app.post("/search", async (req, res) => {
 
         // Call OpenRouter API with enhanced parameters
         const response = await axios.post(
-            "[https://openrouter.ai/api/v1/chat/completions](https://openrouter.ai/api/v1/chat/completions)",
+            "https://openrouter.ai/api/v1/chat/completions", // Corrected URL string
             {
                 model: "meta-llama/llama-3.1-70b-instruct",
                 messages: [
