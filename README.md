@@ -6,7 +6,7 @@ WikiAI is a full-stack web application that uses **Artificial Intelligence to ge
 
 🔎 Search any topic → 🤖 AI generates content → 🖼️ Relevant image → 📚 Structured article
 
----
+
 
 ## ✨ Features
 
@@ -19,7 +19,7 @@ WikiAI is a full-stack web application that uses **Artificial Intelligence to ge
 * 🌐 **Full-Stack Architecture** — Separate frontend and backend
 * 🚀 **Cloud Deployment** — Firebase + Render
 
----
+
 
 ## 🛠️ Tech Stack
 
@@ -33,7 +33,6 @@ WikiAI is a full-stack web application that uses **Artificial Intelligence to ge
 
 **Deployment:** Firebase Hosting • Render
 
----
 
 ## 🔄 How It Works
 
@@ -53,7 +52,7 @@ Wikipedia Image API
 📖 Final Knowledge Article
 ```
 
----
+
 
 ## 🚀 How to Run Locally
 
@@ -105,13 +104,13 @@ http://127.0.0.1:5500/
 
 > Make sure the frontend API URL points to your backend `/search` endpoint.
 
----
+
 
 ## 🌐 Live Demo
 
 🚀 **WikiAI:** https://wikiai-f51a1.web.app/
 
----
+
 
 ## 🔒 Important
 
@@ -119,7 +118,7 @@ http://127.0.0.1:5500/
 
 Keep your API key inside the backend `.env` file and add `.env` to `.gitignore`.
 
----
+
 
 ## 📌 Project Highlights
 
